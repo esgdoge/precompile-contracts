@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "build",
+    "baseUrl": ".",
+    "paths": {
+      "typechain-types": ["typechain-types"],
+      "typechain-types/*": ["typechain-types/*"]
+    }
+  },
+  "include": [
+    "./scripts/**/*.ts",
+    "./test/**/*.ts",
+    "./deploy/**/*.ts",
+    "./typings-custom/**/*.ts",
+    "./typechain-types"
+  ],
+  "files": ["./hardhat.config.ts"]
+}

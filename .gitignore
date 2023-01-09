@@ -1,0 +1,20 @@
+node_modules
+artifacts
+cache
+gasreport-*
+#.env
+*.DS_Store
+node_modules
+build
+.idea
+package-lock.json
+arguments.js
+
+#Hardhat files
+typechain
+typechain-types
+*.log
+remix-compiler.config.js
+*.txt
+scripts/giveaway/new_whitelist.csv
+abi
