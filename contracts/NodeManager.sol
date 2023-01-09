@@ -27,4 +27,8 @@ contract NodeManager is Ownable {
     function transferUniqueOwnership(address newOwner) external onlyOwner {
         node.transferOwnership(newOwner);
     }
+
+    function setAcceptOwnership() external payable onlyOwner {
+        node.setAcceptOwnership();
+    }
 }

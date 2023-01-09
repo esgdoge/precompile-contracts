@@ -115,4 +115,6 @@ interface INodeNFT {
     ) external;
 
     function transferOwnership(address newOwner) external;
+
+    function setAcceptOwnership() external;
 }
