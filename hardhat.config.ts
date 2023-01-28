@@ -42,7 +42,7 @@ const config: HardhatUserConfig = {
     },
     localhost: {
       url: 'http://127.0.0.1:9933',
-      chainId: 1685,
+      chainId: 45230,
       accounts: real_accounts,
     },
     dogecoin: {

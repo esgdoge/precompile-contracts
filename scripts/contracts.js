@@ -4,9 +4,10 @@ const parsedFile = envfile.parse(fs.readFileSync('./.env').toString())
 const { ethers, network } = require('hardhat')
 
 async function getContracts() {
-  let privateKey, nodeRegistryAddress, nodeStakingAddress, nodeNFTAddress, nodeSessionAddress, nodeManagerAddress
+  let privateKey, nodeRegistryAddress, nodeStakingAddress, nodeNFTAddress, nodeSessionAddress, nodeManagerAddress,
+    balanceWrapperAddress
 
-  let nodeRegistry, nodeStaking, nodeNFT, nodeSession, nodeManager
+  let nodeRegistry, nodeStaking, nodeNFT, nodeSession, nodeManager, balanceWrapper
 
   ({
       PRIVATE_KEY: privateKey,
@@ -14,6 +15,7 @@ async function getContracts() {
       NODE_STAKING_ADDRESS: nodeStakingAddress,
       NODE_NFT_ADDRESS: nodeNFTAddress,
       NODE_SESSION_ADDRESS: nodeSessionAddress,
+      BALANCE_WRAPPER_ADDRESS: balanceWrapperAddress,
       NODE_MANAGER_ADDRESS: nodeManagerAddress,
     }
       = parsedFile
@@ -33,6 +35,7 @@ async function getContracts() {
   nodeNFT = await ethers.getContractAt('INodeNFT', nodeNFTAddress)
   nodeSession = await ethers.getContractAt('INodeSession', nodeSessionAddress)
   nodeManager = await ethers.getContractAt('NodeManager', nodeManagerAddress)
+  balanceWrapper = await ethers.getContractAt('IBalanceWrapper', balanceWrapperAddress)
 
   return {
     signer: '0x' + privateKey,
@@ -42,6 +45,7 @@ async function getContracts() {
     nodeNFT,
     nodeSession,
     nodeManager,
+    balanceWrapper,
   }
 }
 

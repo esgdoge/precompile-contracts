@@ -60,9 +60,7 @@ async function setSessionKey(contracts, key) {
 async function collatorActions(to) {
   let contracts = await localContracts.getContracts()
 
-  await setSessionKey(contracts, '0x5e0de8b3ecbf1d142dbd709c3b9c0d2cbf137258e206305f3dd84c0046c78d7' +
-    '05b5cb4e51602558225dc4ca905d0d848be58f3ddf02ada94f56ace812a1feaf108bcf30f383bdcb21cf58693543d190363d' +
-    '8d5a513d98f877698e419b8f7121cca7a89829d809c2f5589b8ae999d578d5fbc43106ae4309833068230202c5a35')
+  await setSessionKey(contracts, '0x5e0de8b3ecbf1d142dbd709c3b9c0d2cbf137258e206305f3dd84c0046c78d7' + '05b5cb4e51602558225dc4ca905d0d848be58f3ddf02ada94f56ace812a1feaf108bcf30f383bdcb21cf58693543d190363d' + '8d5a513d98f877698e419b8f7121cca7a89829d809c2f5589b8ae999d578d5fbc43106ae4309833068230202c5a35')
 
   const tokenId = await contracts.nodeManager.curTokenId()
   await bind(contracts, to, tokenId)
@@ -88,11 +86,26 @@ async function unbondActions() {
   await unbind(contracts, tokenId)
 }
 
+async function balanceWrapper(contracts) {
+  const balanceWrapper = contracts.balanceWrapper
+  console.log(await balanceWrapper.name())
+  console.log(await balanceWrapper.symbol())
+  console.log(await balanceWrapper.decimals())
+  console.log((await balanceWrapper.totalSupply()).toString())
+  console.log((await balanceWrapper.balanceOf(contracts.deployer.address)).toString())
+
+  let tx = await balanceWrapper.mint(contracts.deployer.address, ethers.utils.parseEther('10'))
+  console.log(`BalanceWrapper mint: ${tx.hash}`)
+  tx = await balanceWrapper.burnFrom(contracts.deployer.address, ethers.utils.parseEther('20'))
+  console.log(`BalanceWrapper burnFrom: ${tx.hash}`)
+}
+
 async function main() {
   let contracts = await localContracts.getContracts()
   // await mint(contracts, contracts.deployer.address, 'SuperRare')
 
-  await delegateActions(contracts.deployer.address)
+  // await delegateActions(contracts.deployer.address)
+  await balanceWrapper(contracts)
 }
 
 main()
