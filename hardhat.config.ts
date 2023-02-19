@@ -45,9 +45,9 @@ const config: HardhatUserConfig = {
       chainId: 45230,
       accounts: real_accounts,
     },
-    dogecoin: {
-      url: ' http://52.206.88.57:9001',
-      chainId: 1685,
+    testnet: {
+      url: 'https://rpc1.jaz.network',
+      chainId: 45230,
       accounts: real_accounts,
     },
   },

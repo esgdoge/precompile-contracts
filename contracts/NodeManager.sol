@@ -18,10 +18,14 @@ contract NodeManager is Ownable {
         curTokenId = _tokenId;
     }
 
-    function mint(address to, bytes calldata role) external onlyOwner {
+    function mintSR(address to) external onlyOwner {
         curTokenId++;
-        node.mint(to, curTokenId);
-        node.setAttribute(curTokenId, bytes("role"), role);
+        node.mint(to, curTokenId, bytes("SR"));
+    }
+
+    function mintR(address to) external onlyOwner {
+        curTokenId++;
+        node.mint(to, curTokenId, bytes("R"));
     }
 
     function transferUniqueOwnership(address newOwner) external onlyOwner {

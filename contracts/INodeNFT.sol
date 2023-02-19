@@ -106,13 +106,7 @@ interface INodeNFT {
      *
      * Emits a {Transfer} event.
      */
-    function mint(address to, uint256 tokenId) external;
-
-    function setAttribute(
-        uint256 tokenId,
-        bytes memory key,
-        bytes memory value
-    ) external;
+    function mint(address to, uint256 tokenId, bytes memory rarity) external;
 
     function transferOwnership(address newOwner) external;
 

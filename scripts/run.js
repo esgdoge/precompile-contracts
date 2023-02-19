@@ -4,9 +4,7 @@ const localContracts = require('./contracts')
 // const NewCollatorPrivateKey = "10771b1c06e52bec6cca5fc8d6d144526edcafc39a89e14b8a1a19166c98b306"
 // const NewCollatorAddress = '0x2DB8E5B7FAf3680dC6f83e576e2caF5054bca600'
 
-async function transferOwnership() {
-  let contracts = await localContracts.getContracts()
-
+async function transferOwnership(contracts) {
   // first call setTeam() to change issuer to NodeManager from polkadot apps
   let tx = await contracts.nodeManager.setAcceptOwnership({ value: '1000000000000000000' })
   console.log(`NodeNFT setAcceptOwnership: ${tx.hash}`)
@@ -17,11 +15,9 @@ async function transferOwnership() {
   await tx.wait()
 }
 
-async function mint(contracts, to, role) {
-  // let tx = await contracts.nodeManager.setCurTokenId(1)
-  // console.log(`NodeNFT setCurTokenId: ${tx.hash}`)
-
-  let tx = await contracts.nodeManager.mint(to, Buffer.from(role))
+async function nodeNFTMint(contracts, to, rarity) {
+  const tokenId = await contracts.nodeNFT.totalSupply()
+  let tx = await contracts.nodeNFT.mint(to, tokenId, Buffer.from(rarity))
   console.log(`NodeNFT mint: ${tx.hash}`)
   await tx.wait()
 }
@@ -57,13 +53,13 @@ async function setSessionKey(contracts, key) {
 }
 
 // must new wallet call
-async function collatorActions(to) {
+async function collatorActions() {
   let contracts = await localContracts.getContracts()
 
   await setSessionKey(contracts, '0x5e0de8b3ecbf1d142dbd709c3b9c0d2cbf137258e206305f3dd84c0046c78d7' + '05b5cb4e51602558225dc4ca905d0d848be58f3ddf02ada94f56ace812a1feaf108bcf30f383bdcb21cf58693543d190363d' + '8d5a513d98f877698e419b8f7121cca7a89829d809c2f5589b8ae999d578d5fbc43106ae4309833068230202c5a35')
 
-  const tokenId = await contracts.nodeManager.curTokenId()
-  await bind(contracts, to, tokenId)
+  const tokenId = await contracts.nodeNFT.totalSupply()
+  await bind(contracts, tokenId)
 
   await bond(contracts, tokenId, ethers.utils.parseEther('50'))
 }
@@ -71,12 +67,10 @@ async function collatorActions(to) {
 async function delegateActions() {
   let contracts = await localContracts.getContracts()
 
-  await mint(contracts, 'Rare')
-
   const tokenId = await contracts.nodeManager.curTokenId()
   await delegate(contracts, contracts.deployer.address, tokenId)
 
-  await bond(contracts, tokenId, ethers.utils.parseEther('30'))
+  await bond(contracts, tokenId, ethers.utils.parseEther('1000'))
 }
 
 async function unbondActions() {
@@ -102,10 +96,19 @@ async function balanceWrapper(contracts) {
 
 async function main() {
   let contracts = await localContracts.getContracts()
-  // await mint(contracts, contracts.deployer.address, 'SuperRare')
+
+  // await balanceWrapper(contracts)
+
+  // await nodeNFTMint(contracts, "0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac", 'SR')
+  // await nodeNFTMint(contracts, "0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac", 'R')
+  // await bind(contracts, 4)
+
+  // await delegate(contracts, "0x4c958E887BD2395322A0743F70A9366D5C9DB805", 7)
+
+  // await bond(contracts, 7, ethers.utils.parseEther('100'))
 
   // await delegateActions(contracts.deployer.address)
-  await balanceWrapper(contracts)
+
 }
 
 main()

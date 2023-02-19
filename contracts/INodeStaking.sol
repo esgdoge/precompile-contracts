@@ -9,29 +9,30 @@ interface INodeStaking {
      *
      * Note that `value` may be zero.
      */
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Rewarded(address indexed who, uint256 era, uint256 reward);
 
-    event Bonded(address indexed from, uint256 indexed tokenId, uint256 value);
+    event Bonded(address indexed who, uint256 tokenId, uint256 value);
 
-    event Unbonded(
-        address indexed from,
-        uint256 indexed tokenId,
-        uint256 value
-    );
+    event Rebonded(address indexed who, uint256 tokenId, uint256 value);
+
+    event Unbonded(address indexed who, uint256 tokenId, uint256 value);
 
     function bond(uint256 tokenId) external payable;
 
+    function rebond(uint256 tokenId, uint256 value) external;
+
     function unbond(uint256 tokenId, uint256 value) external;
 
-    /**
-     * @dev Claim the mining rewards of the era index.
-     *
-     * Requirements:
-     *
-     * - `validator` cannot be the zero address.
-     * - `eraIndex` is an era that has already been settled.
-     *
-     * Emits a {Transfer} event.
-     */
-    function payout(address validator, uint256 eraIndex) external;
+    function claimEra(address staker, uint256 eraIndex) external;
+
+    function claimAll(address staker) external;
+
+    function stakingEraReward(
+        address staker,
+        uint256 eraIndex
+    ) external view returns (uint256 reward);
+
+    function stakingUnclaimedReward(
+        address staker
+    ) external view returns (uint256 reward);
 }
